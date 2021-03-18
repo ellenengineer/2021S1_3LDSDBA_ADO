@@ -11,7 +11,9 @@ namespace TesteAPIBanco
     {
         static void Main(string[] args)
         {
-            AtualizarProduto();
+            //InserirProduto();
+            // AtualizarProduto();
+            ExcluirProduto();
             Console.ReadLine();
         }
 
@@ -19,7 +21,7 @@ namespace TesteAPIBanco
         {
             using (var client = new HttpClient())
             {
-                Produto prd = new Produto { Cod_TipoProd = 1, Nome_Prod = "Microondas", Qtd_EstqProd = 4, Val_UnitProd = 300 };
+                Produto prd = new Produto { Cod_TipoProd = 1, Nome_Prod = "Microondas", Qtd_EstqProd = 4, Val_UnitProd = 500 };
                 client.BaseAddress = new Uri("https://localhost:44348/fapen/");
                 var response = client.PutAsJsonAsync("produto", prd).Result;
                 if (response.IsSuccessStatusCode)
@@ -35,7 +37,7 @@ namespace TesteAPIBanco
         {
             using (var client = new HttpClient())
             {
-                Produto prd = new Produto { Cod_Prod = 1, Cod_TipoProd = 1, Nome_Prod = "Microondas", Qtd_EstqProd = 4, Val_UnitProd = 300 };
+                Produto prd = new Produto { Cod_Prod = 11, Cod_TipoProd = 1, Nome_Prod = "Microondas Moderno", Qtd_EstqProd = 10, Val_UnitProd = 550 };
                 client.BaseAddress = new Uri("https://localhost:44348/fapen/");
                 var response = client.PutAsJsonAsync("produto", prd).Result;
                 if (response.IsSuccessStatusCode)
@@ -49,7 +51,7 @@ namespace TesteAPIBanco
 
         static void ExcluirProduto()
         {
-            int idProduto = 8;
+            int idProduto = 11;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://localhost:44348/fapen/");

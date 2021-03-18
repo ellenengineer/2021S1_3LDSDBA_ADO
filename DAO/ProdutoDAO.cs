@@ -23,7 +23,7 @@ namespace DAO
                 sbComando.AppendLine(",Qtd_EstqProd");
                 sbComando.AppendLine(",Val_UnitProd");
                 sbComando.AppendLine(",Val_Total");
-                sbComando.AppendLine("FROM Produto");
+                sbComando.AppendLine(" FROM Produto");
 
                 SqlCommand cmd = new SqlCommand(sbComando.ToString(), conexao);
                 cmd.CommandType = CommandType.Text;
@@ -64,7 +64,9 @@ namespace DAO
                         }
 
                         lstProduto.Add(prd);
+
                     }
+                    reader.Close();
 
                 }
                 catch (SqlException ex)
@@ -75,9 +77,86 @@ namespace DAO
                 {
                     throw ex;
                 }
+                finally
+                {
+                    conexao.Close();
+                }
             }
 
             return lstProduto;
+        }
+
+
+        public Produto GetProdutoByCode(int CodProd)
+        {
+            Produto prod = new Produto();
+            using (SqlConnection conexao = new SqlConnection(connectionString))
+            {
+                StringBuilder sbComando = new StringBuilder();
+                sbComando.AppendLine("SELECT Cod_Prod");
+                sbComando.AppendLine(",Cod_TipoProd");
+                sbComando.AppendLine(",Nome_Prod");
+                sbComando.AppendLine(",Qtd_EstqProd");
+                sbComando.AppendLine(",Val_UnitProd");
+                sbComando.AppendLine(",Val_Total");
+                sbComando.AppendLine(" FROM Produto");
+                sbComando.AppendLine(" WHERE Cod_Prod = " + CodProd);
+
+                SqlCommand cmd = new SqlCommand(sbComando.ToString(), conexao);
+                cmd.CommandType = CommandType.Text;
+
+                try
+                {
+                    conexao.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        int iConvert = 0;
+                        double dConvert = 0;
+                        if (reader["Cod_Prod"] != null)
+                        {
+                            prod.Cod_Prod = int.TryParse(reader["Cod_Prod"].ToString(), out iConvert) ? Convert.ToInt32(reader["Cod_Prod"]) : 0;
+                        }
+                        if (reader["Cod_TipoProd"] != null)
+                        {
+                            prod.Cod_TipoProd = int.TryParse(reader["Cod_TipoProd"].ToString(), out iConvert) ? Convert.ToInt32(reader["Cod_TipoProd"]) : 0;
+                        }
+
+                        prod.Nome_Prod = reader["Nome_Prod"] != null ? reader["Nome_Prod"].ToString() : "Produto inexistente";
+
+                        if (reader["Qtd_EstqProd"] != null)
+                        {
+                            prod.Qtd_EstqProd = int.TryParse(reader["Qtd_EstqProd"].ToString(), out iConvert) ? Convert.ToInt32(reader["Qtd_EstqProd"]) : 0;
+                        }
+                        if (reader["Val_UnitProd"] != null)
+                        {
+                            prod.Val_UnitProd = double.TryParse(reader["Val_UnitProd"].ToString(), out dConvert) ? Convert.ToDouble(reader["Val_UnitProd"]) : 0;
+                        }
+                        if (reader["Val_Total"] != null)
+                        {
+                            prod.Val_Total = double.TryParse(reader["Val_Total"].ToString(), out dConvert) ? Convert.ToDouble(reader["Val_Total"]) : 0;
+                        }
+
+                    }
+                    reader.Close();
+
+                }
+                catch (SqlException ex)
+                {
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    conexao.Close();
+                }
+            }
+
+            return prod;
         }
 
         public int InserirProduto(Produto prd)
@@ -141,7 +220,7 @@ namespace DAO
                 sbComandoSql.AppendLine(",Qtd_EstqProd = @Qtd_EstqProd");
                 sbComandoSql.AppendLine(",Val_UnitProd = @Val_UnitProd");
                 sbComandoSql.AppendLine(" WHERE Cod_Prod = @Cod_Prod");
-    
+
 
                 SqlCommand cmd = new SqlCommand(sbComandoSql.ToString(), con);
                 cmd.CommandType = CommandType.Text;

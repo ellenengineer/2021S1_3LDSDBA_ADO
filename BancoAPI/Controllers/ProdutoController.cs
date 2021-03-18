@@ -44,7 +44,18 @@ namespace BancoAPI.Controllers
 
             List<Produto> lstProduto = objProdDAO.GetProdutos();
 
-            return lstProduto.Average(p=>p.Val_Total);
+            return lstProduto.Average(p => p.Val_Total);
+        }
+
+        [HttpGet]
+        [Route("ValorTotalEstoque")]
+        public double ValorTotalEstoque()
+        {
+            ProdutoDAO objProdDAO = new ProdutoDAO();
+
+            List<Produto> lstProduto = objProdDAO.GetProdutos();
+
+            return lstProduto.Sum(p => p.Val_Total);
         }
 
         [HttpGet]
@@ -69,18 +80,32 @@ namespace BancoAPI.Controllers
             return lstProduto.Min(p => p.Val_UnitProd);
         }
 
+
+        [HttpGet]
+        [Route("FirstOrDefault")]
+        public Produto FirstOrDefault()
+        {
+            ProdutoDAO objProdDAO = new ProdutoDAO();
+
+            List<Produto> lstProduto = objProdDAO.GetProdutos();
+
+            return lstProduto.FirstOrDefault(p=> p.Cod_TipoProd == 1);
+        }
+
         // GET api/<ProdutoController>/5
         [HttpGet("{codProd}")]
-       
+
         public Produto Get(int codProd)
         {
             ProdutoDAO objProdDAO = new ProdutoDAO();
 
             List<Produto> lstProduto = objProdDAO.GetProdutos();
 
-            List<Produto> lstPRodWhere = lstProduto.Where(p => p.Cod_Prod == codProd).ToList();
+            List<Produto> lstPRodWhere = lstProduto.Where(p => p.Cod_Prod == codProd).Take(1).ToList();
 
             Produto prd = lstPRodWhere.FirstOrDefault();
+
+            //Produto prd = objProdDAO.GetProdutoByCode(codProd);
             return prd;
         }
 
