@@ -7,10 +7,8 @@ using System.Text;
 
 namespace DAO
 {
-    public class ProdutoDAO
+    public class ProdutoDAO:DAO
     {
-        const string connectionString = @"Data Source=LAPTOP-B54P23KG;Initial Catalog=INFONEW;Integrated Security=True;";
-
         public List<Produto> GetProdutos()
         {
             List<Produto> lstProduto = new List<Produto>();

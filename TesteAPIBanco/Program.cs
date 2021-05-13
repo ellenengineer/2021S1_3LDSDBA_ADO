@@ -1,5 +1,4 @@
 ﻿using System;
-using Model;
 using System.Net;
 using System.Net.Http;
 using System.IO;
@@ -11,9 +10,9 @@ namespace TesteAPIBanco
     {
         static void Main(string[] args)
         {
-            //InserirProduto();
+            InserirProduto();
             // AtualizarProduto();
-            ExcluirProduto();
+            //ExcluirProduto();
             Console.ReadLine();
         }
 
@@ -21,8 +20,8 @@ namespace TesteAPIBanco
         {
             using (var client = new HttpClient())
             {
-                Produto prd = new Produto { Cod_TipoProd = 1, Nome_Prod = "Microondas", Qtd_EstqProd = 4, Val_UnitProd = 500 };
-                client.BaseAddress = new Uri("https://localhost:44348/fapen/");
+                Produto prd = new Produto { CodTipoProd = 1, NomeProd = "Microondas", QtdEstqProd = 4, ValUnitProd = 500 };
+                client.BaseAddress = new Uri("https://localhost:44366/fapen/");
                 var response = client.PutAsJsonAsync("produto", prd).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -37,8 +36,8 @@ namespace TesteAPIBanco
         {
             using (var client = new HttpClient())
             {
-                Produto prd = new Produto { Cod_Prod = 11, Cod_TipoProd = 1, Nome_Prod = "Microondas Moderno", Qtd_EstqProd = 10, Val_UnitProd = 550 };
-                client.BaseAddress = new Uri("https://localhost:44348/fapen/");
+                Produto prd = new Produto { CodProd = 11, CodTipoProd = 1, NomeProd = "Microondas Moderno", QtdEstqProd = 10, ValUnitProd = 550 };
+                client.BaseAddress = new Uri("https://localhost:44366/fapen/");
                 var response = client.PutAsJsonAsync("produto", prd).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -54,7 +53,7 @@ namespace TesteAPIBanco
             int idProduto = 11;
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44348/fapen/");
+                client.BaseAddress = new Uri("https://localhost:44366/fapen/");
                 var response = client.DeleteAsync("produto/" + idProduto).Result;
                 if (response.IsSuccessStatusCode)
                 {
